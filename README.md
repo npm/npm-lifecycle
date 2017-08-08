@@ -36,7 +36,7 @@ jump in if you'd like to, or even ask us questions if something isn't clear.
 
 ### API
 
-#### <a name="lifecycle"></a> `> lifecycle(name, pkg, [opts]) -> Promise`
+#### <a name="lifecycle"></a> `> lifecycle(name, pkg, wd, [opts]) -> Promise`
 
 ##### Example
 

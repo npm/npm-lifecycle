@@ -27,47 +27,52 @@ function logid (pkg, stage) {
   return pkg._id + '~' + stage + ':'
 }
 
-function lifecycle (pkg, stage, wd, opts, cb) {
-  while (pkg && pkg._data) pkg = pkg._data
-  if (!pkg) return cb(new Error('Invalid package data'))
+function lifecycle (pkg, stage, wd, opts) {
+  return new Promise((resolve, reject) => {
+    while (pkg && pkg._data) pkg = pkg._data
+    if (!pkg) return reject(new Error('Invalid package data'))
 
-  opts.log.info('lifecycle', logid(pkg, stage), pkg._id)
-  if (!pkg.scripts) pkg.scripts = {}
+    opts.log.info('lifecycle', logid(pkg, stage), pkg._id)
+    if (!pkg.scripts) pkg.scripts = {}
 
-  if (opts.ignoreScripts) {
-    opts.log.info('lifecycle', logid(pkg, stage), 'ignored because ignore-scripts is set to true', pkg._id)
-    pkg.scripts = {}
-  }
-  if (stage === 'prepublish' && opts.ignorePrepublish) {
-    opts.log.info('lifecycle', logid(pkg, stage), 'ignored because ignore-prepublish is set to true', pkg._id)
-    delete pkg.scripts.prepublish
-  }
-
-  if (!pkg.scripts[stage]) return cb()
-
-  validWd(wd || path.resolve(opts.dir, pkg.name), function (er, wd) {
-    if (er) return cb(er)
-
-    if ((wd.indexOf(opts.dir) !== 0 || _incorrectWorkingDirectory(wd, pkg)) &&
-        !opts.unsafePerm && pkg.scripts[stage]) {
-      opts.log.warn('lifecycle', logid(pkg, stage), 'cannot run in wd',
-        '%s %s (wd=%s)', pkg._id, pkg.scripts[stage], wd
-      )
-      return cb()
+    if (opts.ignoreScripts) {
+      opts.log.info('lifecycle', logid(pkg, stage), 'ignored because ignore-scripts is set to true', pkg._id)
+      pkg.scripts = {}
+    }
+    if (stage === 'prepublish' && opts.ignorePrepublish) {
+      opts.log.info('lifecycle', logid(pkg, stage), 'ignored because ignore-prepublish is set to true', pkg._id)
+      delete pkg.scripts.prepublish
     }
 
-    // set the env variables, then run scripts as a child process.
-    var env = makeEnv(pkg, opts)
-    env.npm_lifecycle_event = stage
-    env.npm_node_execpath = env.NODE = env.NODE || process.execPath
-    env.npm_execpath = require.main.filename
-    env.INIT_CWD = process.cwd()
+    if (!pkg.scripts[stage]) return resolve()
 
-    // 'nobody' typically doesn't have permission to write to /tmp
-    // even if it's never used, sh freaks out.
-    if (!opts.unsafePerm) env.TMPDIR = wd
+    validWd(wd || path.resolve(opts.dir, pkg.name), function (er, wd) {
+      if (er) return reject(er)
 
-    lifecycle_(pkg, stage, wd, opts, env, cb)
+      if ((wd.indexOf(opts.dir) !== 0 || _incorrectWorkingDirectory(wd, pkg)) &&
+          !opts.unsafePerm && pkg.scripts[stage]) {
+        opts.log.warn('lifecycle', logid(pkg, stage), 'cannot run in wd',
+          '%s %s (wd=%s)', pkg._id, pkg.scripts[stage], wd
+        )
+        return resolve()
+      }
+
+      // set the env variables, then run scripts as a child process.
+      var env = makeEnv(pkg, opts)
+      env.npm_lifecycle_event = stage
+      env.npm_node_execpath = env.NODE = env.NODE || process.execPath
+      env.npm_execpath = require.main.filename
+      env.INIT_CWD = process.cwd()
+
+      // 'nobody' typically doesn't have permission to write to /tmp
+      // even if it's never used, sh freaks out.
+      if (!opts.unsafePerm) env.TMPDIR = wd
+
+      lifecycle_(pkg, stage, wd, opts, env, (er) => {
+        if (er) return reject(er)
+        return resolve()
+      })
+    })
   })
 }
 
