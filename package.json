@@ -1,0 +1,39 @@
+{
+  "name": "npm-lifecycle",
+  "version": "0.0.1",
+  "description": "JavaScript package lifecycle hook runner",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "standard",
+    "test": "nyc --all --reporter=html -- tap -J test/**/*.js",
+    "coverage": "nyc --all --reporter=html -- tap -J test/**/*.js && open coverage/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/npm/lifecycle.git"
+  },
+  "keywords": [
+    "npm",
+    "lifecycle",
+    "hook",
+    "runner"
+  ],
+  "author": "Mike Sherov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/npm/lifecycle/issues"
+  },
+  "homepage": "https://github.com/npm/lifecycle#readme",
+  "dependencies": {
+    "graceful-fs": "~4.1.11",
+    "slide": "~1.1.6",
+    "uid-number": "0.0.6",
+    "umask": "~1.1.0",
+    "which": "~1.2.14"
+  },
+  "devDependencies": {
+    "nyc": "^11.1.0",
+    "standard": "^10.0.3",
+    "tap": "^10.7.1"
+  }
+}
