@@ -1,3 +1,5 @@
+'use strict'
+
 exports = module.exports = lifecycle
 exports.makeEnv = makeEnv
 exports._incorrectWorkingDirectory = _incorrectWorkingDirectory
