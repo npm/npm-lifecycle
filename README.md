@@ -6,7 +6,7 @@ intended to be fully compatible with the way npm executes individual scripts.
 
 ## Install
 
-`$ npm install @npm/lifecycle`
+`$ npm install npm-lifecycle`
 
 ## Table of Contents
 
