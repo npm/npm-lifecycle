@@ -23,7 +23,7 @@
     "runner"
   ],
   "author": "Mike Sherov",
-  "license": "ISC",
+  "license": "Artistic-2.0",
   "bugs": {
     "url": "https://github.com/npm/lifecycle/issues"
   },
