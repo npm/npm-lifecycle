@@ -4,9 +4,13 @@
   "description": "JavaScript package lifecycle hook runner",
   "main": "index.js",
   "scripts": {
+    "prerelease": "npm t",
+    "postrelease": "npm publish && git push --follow-tags",
     "pretest": "standard",
-    "test": "nyc --all --reporter=html -- tap -J test/**/*.js",
-    "coverage": "nyc --all --reporter=html -- tap -J test/**/*.js && open coverage/index.html"
+    "release": "standard-version -s",
+    "test": "tap -J --coverage test/*.js",
+    "update-coc": "weallbehave -o . && git add CODE_OF_CONDUCT.md && git commit -m 'docs(coc): updated CODE_OF_CONDUCT.md'",
+    "update-contrib": "weallcontribute -o . && git add CONTRIBUTING.md && git commit -m 'docs(contributing): updated CONTRIBUTING.md'"
   },
   "repository": {
     "type": "git",
@@ -34,6 +38,9 @@
   "devDependencies": {
     "nyc": "^11.1.0",
     "standard": "^10.0.3",
-    "tap": "^10.7.2"
+    "standard-version": "^4.2.0",
+    "tap": "^10.7.2",
+    "weallbehave": "^1.2.0",
+    "weallcontribute": "^1.0.8"
   }
 }
