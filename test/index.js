@@ -1,7 +1,11 @@
 'use strict'
 
 const test = require('tap').test
+const sinon = require('sinon')
 const lifecycle = require('../index.js')
+const path = require('path')
+
+function noop () {}
 
 test('makeEnv', function (t) {
   const pkg = {
@@ -63,4 +67,75 @@ test('_incorrectWorkingDirectory: rejects wd from other packages', function (t) 
 
   t.equal(lifecycle._incorrectWorkingDirectory(wd, pkg), true)
   t.end()
+})
+
+test("reports child's output", function (t) {
+  const fixture = path.join(__dirname, 'fixtures', 'count-to-10')
+
+  const verbose = sinon.spy()
+  const silly = sinon.spy()
+  const log = {
+    level: 'silent',
+    info: noop,
+    warn: noop,
+    silly,
+    verbose,
+    pause: noop,
+    resume: noop,
+    clearProgress: noop,
+    showProgress: noop
+  }
+  const dir = path.join(__dirname, '..')
+
+  const pkg = require(path.join(fixture, 'package.json'))
+
+  lifecycle(pkg, 'postinstall', fixture, {
+    stdio: 'pipe',
+    log,
+    dir,
+    config: {}
+  })
+  .then(() => {
+    t.ok(
+      verbose.calledWithMatch(
+        'lifecycle',
+        'undefined~postinstall:',
+        'stdout',
+        'line 1'
+      ),
+      'stdout reported'
+    )
+    t.ok(
+      verbose.calledWithMatch(
+        'lifecycle',
+        'undefined~postinstall:',
+        'stdout',
+        'line 2'
+      ),
+      'stdout reported'
+    )
+    t.ok(
+      verbose.calledWithMatch(
+        'lifecycle',
+        'undefined~postinstall:',
+        'stderr',
+        'some error'
+      ),
+      'stderr reported'
+    )
+    t.ok(
+      silly.calledWithMatch(
+        'lifecycle',
+        'undefined~postinstall:',
+        'Returned: code:',
+        0,
+        ' signal:',
+        null
+      ),
+      'exit code reported'
+    )
+
+    t.end()
+  })
+  .catch(t.end)
 })

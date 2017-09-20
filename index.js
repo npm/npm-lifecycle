@@ -12,6 +12,7 @@ const chain = require('slide').chain
 const uidNumber = require('uid-number')
 const umask = require('umask')
 const which = require('which')
+const byline = require('byline')
 
 let PATH = 'PATH'
 
@@ -244,7 +245,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
   var conf = {
     cwd: wd,
     env: env,
-    stdio: [ 0, 1, 2 ]
+    stdio: opts.stdio || [ 0, 1, 2 ]
   }
 
   if (!unsafe) {
@@ -281,6 +282,12 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
       er.errno = code
     }
     procError(er)
+  })
+  byline(proc.stdout).on('data', function (data) {
+    opts.log.verbose('lifecycle', logid(pkg, stage), 'stdout', data.toString())
+  })
+  byline(proc.stderr).on('data', function (data) {
+    opts.log.verbose('lifecycle', logid(pkg, stage), 'stderr', data.toString())
   })
   process.once('SIGTERM', procKill)
   process.once('SIGINT', procInterupt)
