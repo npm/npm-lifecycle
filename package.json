@@ -30,6 +30,8 @@
   "homepage": "https://github.com/npm/lifecycle#readme",
   "dependencies": {
     "graceful-fs": "^4.1.11",
+    "node-gyp": "^3.6.2",
+    "resolve-from": "^4.0.0",
     "slide": "^1.1.6",
     "uid-number": "0.0.6",
     "umask": "^1.1.0",
@@ -45,6 +47,7 @@
   },
   "files": [
     "index.js",
-    "lib/spawn.js"
+    "lib/spawn.js",
+    "node-gyp-bin"
   ]
 }
