@@ -13,6 +13,9 @@ const uidNumber = require('uid-number')
 const umask = require('umask')
 const which = require('which')
 const byline = require('byline')
+const resolveFrom = require('resolve-from')
+
+const DEFAULT_NODE_GYP_PATH = resolveFrom(__dirname, 'node-gyp/bin/node-gyp')
 
 let PATH = 'PATH'
 
@@ -62,6 +65,7 @@ function lifecycle (pkg, stage, wd, opts) {
       env.npm_node_execpath = env.NODE = env.NODE || process.execPath
       env.npm_execpath = require.main.filename
       env.INIT_CWD = process.cwd()
+      env.npm_config_node_gyp = env.npm_config_node_gyp || DEFAULT_NODE_GYP_PATH
 
       // 'nobody' typically doesn't have permission to write to /tmp
       // even if it's never used, sh freaks out.
@@ -92,7 +96,7 @@ function lifecycle_ (pkg, stage, wd, opts, env, cb) {
 
   // we also unshift the bundled node-gyp-bin folder so that
   // the bundled one will be used for installing things.
-  pathArr.unshift(path.join(__dirname, '..', '..', 'bin', 'node-gyp-bin'))
+  pathArr.unshift(path.join(__dirname, 'node-gyp-bin'))
 
   if (shouldPrependCurrentNodeDirToPATH(opts)) {
     // prefer current node interpreter in child scripts
