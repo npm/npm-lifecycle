@@ -355,6 +355,8 @@ function makeEnv (data, opts, prefix, env) {
     )
   }
 
+  if (opts.nodeOptions) env.NODE_OPTIONS = opts.nodeOptions
+
   for (i in data) {
     if (i.charAt(0) !== '_') {
       var envKey = (prefix + i).replace(/[^a-zA-Z0-9_]/g, '_')

@@ -19,7 +19,10 @@ test('makeEnv', function (t) {
     'myPackage@1.0.0:foo': 5
   }
 
-  const env = lifecycle.makeEnv(pkg, { config }, null, process.env)
+  const env = lifecycle.makeEnv(pkg, {
+    config,
+    nodeOptions: '--inspect-brk --abort-on-uncaught-exception'
+  }, null, process.env)
 
   t.equal('myPackage', env.npm_package_name, 'package data is included')
   t.equal('Mike Sherov', env.npm_package_contributors_0_name, 'nested package data is included')
@@ -36,6 +39,8 @@ test('makeEnv', function (t) {
   t.equal('2', env.npm_package_config_bar, 'package config is included')
   t.equal('4', env.npm_package_config_baz, 'package@version config is included')
   t.equal('5', env.npm_package_config_foo, 'package@version config overrides package config')
+
+  t.equal('--inspect-brk --abort-on-uncaught-exception', env.NODE_OPTIONS, 'nodeOptions sets NODE_OPTIONS')
   t.end()
 })
 
