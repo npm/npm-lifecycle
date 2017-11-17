@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/npm/lifecycle#readme",
   "dependencies": {
+    "byline": "^5.0.0",
     "graceful-fs": "^4.1.11",
     "slide": "^1.1.6",
     "uid-number": "0.0.6",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "nyc": "^11.1.0",
+    "sinon": "^4.0.1",
     "standard": "^10.0.3",
     "standard-version": "^4.2.0",
     "tap": "^10.7.2",
