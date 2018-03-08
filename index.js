@@ -46,10 +46,9 @@ function lifecycle (pkg, stage, wd, opts) {
       delete pkg.scripts.prepublish
     }
 
-	var stage = env.npm_lifecycle_event
     var hookPath = path.join(opts.dir, '.hooks', stage)
 
-	if (!pkg.scripts[stage] && !fs.existsSync(hookPath)) return resolve()
+    if (!pkg.scripts[stage] && !fs.existsSync(hookPath)) return resolve()
 
     validWd(wd || path.resolve(opts.dir, pkg.name), function (er, wd) {
       if (er) return reject(er)
