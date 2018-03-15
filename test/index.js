@@ -74,6 +74,48 @@ test('_incorrectWorkingDirectory: rejects wd from other packages', function (t) 
   t.end()
 })
 
+test('runs scripts from .hooks directory even if no script is present in package.json', function (t) {
+  const fixture = path.join(__dirname, 'fixtures', 'has-hooks')
+
+  const verbose = sinon.spy()
+  const silly = sinon.spy()
+  const log = {
+    level: 'silent',
+    info: noop,
+    warn: noop,
+    silly,
+    verbose,
+    pause: noop,
+    resume: noop,
+    clearProgress: noop,
+    showProgress: noop
+  }
+  const dir = path.join(fixture, 'node_modules')
+
+  const pkg = require(path.join(fixture, 'package.json'))
+
+  lifecycle(pkg, 'postinstall', fixture, {
+    stdio: 'pipe',
+    log,
+    dir,
+    config: {}
+  })
+  .then(() => {
+    t.ok(
+      verbose.calledWithMatch(
+        'lifecycle',
+        'undefined~postinstall:',
+        'stdout',
+        'ran hook'
+      ),
+      'ran postinstall hook'
+    )
+
+    t.end()
+  })
+  .catch(t.end)
+})
+
 test("reports child's output", function (t) {
   const fixture = path.join(__dirname, 'fixtures', 'count-to-10')
 
