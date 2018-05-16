@@ -122,6 +122,9 @@ function lifecycle_ (pkg, stage, wd, opts, env, cb) {
 
   if (env[PATH]) pathArr.push(env[PATH])
   env[PATH] = pathArr.join(process.platform === 'win32' ? ';' : ':')
+  if (process.platform === 'win32') {
+    env.path = env.PATH = env.Path = env[PATH]
+  }
 
   var packageLifecycle = pkg.scripts && pkg.scripts.hasOwnProperty(stage)
 
