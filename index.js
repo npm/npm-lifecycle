@@ -408,8 +408,8 @@ function makeEnv (data, opts, prefix, env) {
       } else {
         env[envKey] = String(data[i])
         env[envKey] = env[envKey].indexOf('\n') !== -1
-                        ? JSON.stringify(env[envKey])
-                        : env[envKey]
+          ? JSON.stringify(env[envKey])
+          : env[envKey]
       }
     }
   }
@@ -436,8 +436,8 @@ function makeEnv (data, opts, prefix, env) {
     else if (typeof value !== 'string') value = JSON.stringify(value)
 
     value = value.indexOf('\n') !== -1
-          ? JSON.stringify(value)
-          : value
+      ? JSON.stringify(value)
+      : value
     i = i.replace(/^_+/, '')
     var k
     if (i.indexOf(namePref) === 0) {

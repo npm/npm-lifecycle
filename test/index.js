@@ -100,20 +100,20 @@ test('runs scripts from .hooks directory even if no script is present in package
     dir,
     config: {}
   })
-  .then(() => {
-    t.ok(
-      verbose.calledWithMatch(
-        'lifecycle',
-        'undefined~postinstall:',
-        'stdout',
-        'ran hook'
-      ),
-      'ran postinstall hook'
-    )
+    .then(() => {
+      t.ok(
+        verbose.calledWithMatch(
+          'lifecycle',
+          'undefined~postinstall:',
+          'stdout',
+          'ran hook'
+        ),
+        'ran postinstall hook'
+      )
 
-    t.end()
-  })
-  .catch(t.end)
+      t.end()
+    })
+    .catch(t.end)
 })
 
 test("reports child's output", function (t) {
@@ -142,47 +142,47 @@ test("reports child's output", function (t) {
     dir,
     config: {}
   })
-  .then(() => {
-    t.ok(
-      verbose.calledWithMatch(
-        'lifecycle',
-        'undefined~postinstall:',
-        'stdout',
-        'line 1'
-      ),
-      'stdout reported'
-    )
-    t.ok(
-      verbose.calledWithMatch(
-        'lifecycle',
-        'undefined~postinstall:',
-        'stdout',
-        'line 2'
-      ),
-      'stdout reported'
-    )
-    t.ok(
-      verbose.calledWithMatch(
-        'lifecycle',
-        'undefined~postinstall:',
-        'stderr',
-        'some error'
-      ),
-      'stderr reported'
-    )
-    t.ok(
-      silly.calledWithMatch(
-        'lifecycle',
-        'undefined~postinstall:',
-        'Returned: code:',
-        0,
-        ' signal:',
-        null
-      ),
-      'exit code reported'
-    )
+    .then(() => {
+      t.ok(
+        verbose.calledWithMatch(
+          'lifecycle',
+          'undefined~postinstall:',
+          'stdout',
+          'line 1'
+        ),
+        'stdout reported'
+      )
+      t.ok(
+        verbose.calledWithMatch(
+          'lifecycle',
+          'undefined~postinstall:',
+          'stdout',
+          'line 2'
+        ),
+        'stdout reported'
+      )
+      t.ok(
+        verbose.calledWithMatch(
+          'lifecycle',
+          'undefined~postinstall:',
+          'stderr',
+          'some error'
+        ),
+        'stderr reported'
+      )
+      t.ok(
+        silly.calledWithMatch(
+          'lifecycle',
+          'undefined~postinstall:',
+          'Returned: code:',
+          0,
+          ' signal:',
+          null
+        ),
+        'exit code reported'
+      )
 
-    t.end()
-  })
-  .catch(t.end)
+      t.end()
+    })
+    .catch(t.end)
 })
