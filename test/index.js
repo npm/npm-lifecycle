@@ -25,7 +25,7 @@ test('makeEnv', function (t) {
 
   const env = lifecycle.makeEnv(pkg, {
     config,
-    nodeOptions: '--inspect-brk --abort-on-uncaught-exception'
+    nodeOptions: '--inspect-brk --harmony --abort-on-uncaught-exception'
   }, null, process.env)
 
   t.equal('myPackage', env.npm_package_name, 'package data is included')
@@ -44,7 +44,7 @@ test('makeEnv', function (t) {
   t.equal('4', env.npm_package_config_baz, 'package@version config is included')
   t.equal('5', env.npm_package_config_foo, 'package@version config overrides package config')
 
-  t.equal('--inspect-brk --abort-on-uncaught-exception', env.NODE_OPTIONS, 'nodeOptions sets NODE_OPTIONS')
+  t.equal('--inspect-brk --harmony --abort-on-uncaught-exception', env.NODE_OPTIONS, 'nodeOptions sets NODE_OPTIONS')
   t.end()
 })
 
