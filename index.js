@@ -282,8 +282,11 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     sh = customShell
   } else if (process.platform === 'win32') {
     sh = process.env.comspec || 'cmd'
-    shFlag = '/d /s /c'
-    conf.windowsVerbatimArguments = true
+    // '/d /s /c' is used only for cmd.exe.
+    if (/^(?:.*\\)?cmd(?:\.exe)?$/i.test(file)) {
+      shFlag = '/d /s /c'
+      conf.windowsVerbatimArguments = true
+    }
   }
 
   opts.log.verbose('lifecycle', logid(pkg, stage), 'PATH:', env[PATH])
