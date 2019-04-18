@@ -23,11 +23,13 @@ let PATH = 'PATH'
 // windows calls it's path 'Path' usually, but this is not guaranteed.
 if (process.platform === 'win32') {
   PATH = 'Path'
-  Object.keys(process.env).forEach(function (e) {
-    if (e.match(/^PATH$/i)) {
-      PATH = e
-    }
-  })
+  if (!process.env[PATH]) {
+    Object.keys(process.env).forEach(function (e) {
+      if (e.match(/^PATH$/i)) {
+        PATH = e
+      }
+    })
+  }
 }
 
 function logid (pkg, stage) {
