@@ -333,6 +333,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     process.removeListener('SIGTERM', procKill)
     process.removeListener('SIGTERM', procInterupt)
     process.removeListener('SIGINT', procKill)
+    process.removeListener('SIGINT', procInterupt)
     return cb(er)
   }
   function procKill () {
