@@ -50,7 +50,7 @@ test('makeEnv', function (t) {
 
 test('_incorrectWorkingDirectory: accepts wd for package that matches project\'s name', function (t) {
   const wd = '/opt/my-time/node_modules/time'
-  const pkg = {name: 'time'}
+  const pkg = { name: 'time' }
 
   t.equal(lifecycle._incorrectWorkingDirectory(wd, pkg), false)
   t.end()
@@ -58,7 +58,7 @@ test('_incorrectWorkingDirectory: accepts wd for package that matches project\'s
 
 test('_incorrectWorkingDirectory: accepts wd for package that doesn\'t match project\'s name', function (t) {
   const wd = '/opt/my-project/node_modules/time'
-  const pkg = {name: 'time'}
+  const pkg = { name: 'time' }
 
   t.equal(lifecycle._incorrectWorkingDirectory(wd, pkg), false)
   t.end()
