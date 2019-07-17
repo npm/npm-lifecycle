@@ -4,6 +4,9 @@ exports = module.exports = lifecycle
 exports.makeEnv = makeEnv
 exports._incorrectWorkingDirectory = _incorrectWorkingDirectory
 
+// for testing
+const platform = process.env.__TESTING_FAKE_PLATFORM__ || process.platform
+const isWindows = platform === 'win32'
 const spawn = require('./lib/spawn')
 const path = require('path')
 const Stream = require('stream').Stream
@@ -20,8 +23,8 @@ const hookStatCache = new Map()
 
 let PATH = 'PATH'
 
-// windows calls it's path 'Path' usually, but this is not guaranteed.
-if (process.platform === 'win32') {
+// windows calls its path 'Path' usually, but this is not guaranteed.
+if (isWindows) {
   PATH = 'Path'
   if (!process.env[PATH]) {
     Object.keys(process.env).forEach(function (e) {
@@ -31,6 +34,8 @@ if (process.platform === 'win32') {
     })
   }
 }
+
+exports._pathEnvName = PATH
 
 function logid (pkg, stage) {
   return pkg._id + '~' + stage + ':'
@@ -123,7 +128,7 @@ function lifecycle_ (pkg, stage, wd, opts, env, cb) {
   }
 
   if (env[PATH]) pathArr.push(env[PATH])
-  env[PATH] = pathArr.join(process.platform === 'win32' ? ';' : ':')
+  env[PATH] = pathArr.join(isWindows ? ';' : ':')
 
   var packageLifecycle = pkg.scripts && pkg.scripts.hasOwnProperty(stage)
 
@@ -166,7 +171,6 @@ function shouldPrependCurrentNodeDirToPATH (opts) {
 
   var isDifferentNodeInPath
 
-  var isWindows = process.platform === 'win32'
   var foundExecPath
   try {
     foundExecPath = which.sync(path.basename(process.execPath), { pathExt: isWindows ? ';' : ':' })
@@ -244,7 +248,7 @@ function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
   }
   opts.log.verbose('lifecycle', logid(pkg, stage), 'unsafe-perm in lifecycle', unsafe)
 
-  if (process.platform === 'win32') {
+  if (isWindows) {
     unsafe = true
   }
 
@@ -282,7 +286,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
 
   if (customShell) {
     sh = customShell
-  } else if (process.platform === 'win32') {
+  } else if (isWindows) {
     sh = process.env.comspec || 'cmd'
     shFlag = '/d /s /c'
     conf.windowsVerbatimArguments = true
