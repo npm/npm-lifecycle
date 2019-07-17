@@ -261,14 +261,8 @@ function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
   }
 }
 
-function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
-  function cb (er) {
-    cb_.apply(null, arguments)
-    opts.log.resume()
-    process.nextTick(dequeue)
-  }
-
-  var conf = {
+const getSpawnArgs = ({ cmd, wd, opts, uid, gid, unsafe, env }) => {
+  const conf = {
     cwd: wd,
     env: env,
     stdio: opts.stdio || [ 0, 1, 2 ]
@@ -279,14 +273,13 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     conf.gid = gid ^ 0
   }
 
-  var sh = 'sh'
-  var shFlag = '-c'
+  const customShell = opts.scriptShell
 
-  var customShell = opts.scriptShell
-
+  let sh = 'sh'
+  let shFlag = '-c'
   if (customShell) {
     sh = customShell
-  } else if (isWindows) {
+  } else if (isWindows || opts._TESTING_FAKE_WINDOWS_) {
     sh = process.env.comspec || 'cmd'
     // '/d /s /c' is used only for cmd.exe.
     if (/^(?:.*\\)?cmd(?:\.exe)?$/i.test(sh)) {
@@ -295,11 +288,25 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     }
   }
 
+  return [sh, [shFlag, cmd], conf]
+}
+
+exports._getSpawnArgs = getSpawnArgs
+
+function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
+  function cb (er) {
+    cb_.apply(null, arguments)
+    opts.log.resume()
+    process.nextTick(dequeue)
+  }
+
+  const [sh, args, conf] = getSpawnArgs({ cmd, wd, opts, uid, gid, unsafe, env })
+
   opts.log.verbose('lifecycle', logid(pkg, stage), 'PATH:', env[PATH])
   opts.log.verbose('lifecycle', logid(pkg, stage), 'CWD:', wd)
-  opts.log.silly('lifecycle', logid(pkg, stage), 'Args:', [shFlag, cmd])
+  opts.log.silly('lifecycle', logid(pkg, stage), 'Args:', args)
 
-  var proc = spawn(sh, [shFlag, cmd], conf, opts.log)
+  var proc = spawn(sh, args, conf, opts.log)
 
   proc.on('error', procError)
   proc.on('close', function (code, signal) {
