@@ -7,83 +7,143 @@
 'use strict'
 exports[`test/get-spawn-args.js TAP > custom windows script shell 1`] = `
 [
-  'flerbbyderb',
-  [ '-c', 'cmd' ],
+  "flerbbyderb",
+  [
+    "-c",
+    "cmd"
+  ],
   {
-    cwd: '/working/dir',
-    env: { env: 'iron', men: 'tal' },
-    stdio: [ 0, 1, 2 ],
-    uid: 123,
-    gid: 432
+    "cwd": "/working/dir",
+    "env": {
+      "env": "iron",
+      "men": "tal"
+    },
+    "stdio": [
+      0,
+      1,
+      2
+    ],
+    "uid": 123,
+    "gid": 432
   }
 ]
 `
 
 exports[`test/get-spawn-args.js TAP > just basics 1`] = `
 [
-  'sh',
-  [ '-c', 'cmd' ],
+  "sh",
+  [
+    "-c",
+    "cmd"
+  ],
   {
-    cwd: '/working/dir',
-    env: { env: 'iron', men: 'tal' },
-    stdio: [ 0, 1, 2 ],
-    uid: 123,
-    gid: 432
+    "cwd": "/working/dir",
+    "env": {
+      "env": "iron",
+      "men": "tal"
+    },
+    "stdio": [
+      0,
+      1,
+      2
+    ],
+    "uid": 123,
+    "gid": 432
   }
 ]
 `
 
 exports[`test/get-spawn-args.js TAP > stdio and numeric string uid 1`] = `
 [
-  'sh',
-  [ '-c', 'cmd' ],
+  "sh",
+  [
+    "-c",
+    "cmd"
+  ],
   {
-    cwd: '/working/dir',
-    env: { env: 'iron', men: 'tal' },
-    stdio: [ 3, 2, 1 ],
-    uid: 123,
-    gid: 432
+    "cwd": "/working/dir",
+    "env": {
+      "env": "iron",
+      "men": "tal"
+    },
+    "stdio": [
+      3,
+      2,
+      1
+    ],
+    "uid": 123,
+    "gid": 432
   }
 ]
 `
 
 exports[`test/get-spawn-args.js TAP > unsafe numeric string uid 1`] = `
 [
-  'sh',
-  [ '-c', 'cmd' ],
+  "sh",
+  [
+    "-c",
+    "cmd"
+  ],
   {
-    cwd: '/working/dir',
-    env: { env: 'iron', men: 'tal' },
-    stdio: [ 3, 2, 1 ]
+    "cwd": "/working/dir",
+    "env": {
+      "env": "iron",
+      "men": "tal"
+    },
+    "stdio": [
+      3,
+      2,
+      1
+    ]
   }
 ]
 `
 
 exports[`test/get-spawn-args.js TAP > weird comspec 1`] = `
 [
-  'flerbbyderb',
-  [ '-c', 'cmd' ],
+  "flerbbyderb",
+  [
+    "-c",
+    "cmd"
+  ],
   {
-    cwd: '/working/dir',
-    env: { env: 'iron', men: 'tal' },
-    stdio: [ 0, 1, 2 ],
-    uid: 123,
-    gid: 432
+    "cwd": "/working/dir",
+    "env": {
+      "env": "iron",
+      "men": "tal"
+    },
+    "stdio": [
+      0,
+      1,
+      2
+    ],
+    "uid": 123,
+    "gid": 432
   }
 ]
 `
 
 exports[`test/get-spawn-args.js TAP > windows 1`] = `
 [
-  'CMD.exe',
-  [ '/d /s /c', 'cmd' ],
+  "CMD.exe",
+  [
+    "/d /s /c",
+    "cmd"
+  ],
   {
-    cwd: '/working/dir',
-    env: { env: 'iron', men: 'tal' },
-    stdio: [ 0, 1, 2 ],
-    uid: 123,
-    gid: 432,
-    windowsVerbatimArguments: true
+    "cwd": "/working/dir",
+    "env": {
+      "env": "iron",
+      "men": "tal"
+    },
+    "stdio": [
+      0,
+      1,
+      2
+    ],
+    "uid": 123,
+    "gid": 432,
+    "windowsVerbatimArguments": true
   }
 ]
 `

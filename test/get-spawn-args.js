@@ -8,27 +8,29 @@ const wd = '/working/dir'
 const env = { env: 'iron', men: 'tal' }
 const b = { cmd, wd, env, uid: 123, gid: 432, opts: {} }
 
-t.matchSnapshot(getSpawnArgs(b), 'just basics')
+const snap = (o, m) => t.matchSnapshot(JSON.stringify(o, null, 2), m)
 
-t.matchSnapshot(getSpawnArgs(Object.assign({}, b, {
+snap(getSpawnArgs(b), 'just basics')
+
+snap(getSpawnArgs(Object.assign({}, b, {
   opts: { stdio: [3, 2, 1] },
   uid: '123'
 })), 'stdio and numeric string uid')
 
-t.matchSnapshot(getSpawnArgs(Object.assign({}, b, {
+snap(getSpawnArgs(Object.assign({}, b, {
   opts: { stdio: [3, 2, 1] },
   uid: '123',
   unsafe: true
 })), 'unsafe numeric string uid')
 
 process.env.comspec = 'CMD.exe'
-t.matchSnapshot(getSpawnArgs(Object.assign({}, b, {
+snap(getSpawnArgs(Object.assign({}, b, {
   opts: {
     _TESTING_FAKE_WINDOWS_: true
   }
 })), 'windows')
 
-t.matchSnapshot(getSpawnArgs(Object.assign({}, b, {
+snap(getSpawnArgs(Object.assign({}, b, {
   opts: {
     _TESTING_FAKE_WINDOWS_: true,
     scriptShell: 'flerbbyderb'
@@ -36,7 +38,7 @@ t.matchSnapshot(getSpawnArgs(Object.assign({}, b, {
 })), 'custom windows script shell')
 
 process.env.comspec = 'flerbbyderb'
-t.matchSnapshot(getSpawnArgs(Object.assign({}, b, {
+snap(getSpawnArgs(Object.assign({}, b, {
   opts: {
     _TESTING_FAKE_WINDOWS_: true
   }
