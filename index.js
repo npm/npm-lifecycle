@@ -388,7 +388,7 @@ function makeEnv (data, opts, prefix, env) {
   if (!env) {
     env = {}
     for (var i in process.env) {
-      if (!i.match(/^npm_/) && (!i.match(/^PATH$/i) || i === PATH)) {
+      if (!i.match(/^npm_/)) {
         env[i] = process.env[i]
       }
     }
