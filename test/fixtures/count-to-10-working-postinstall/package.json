@@ -1,0 +1,7 @@
+{
+  "name": "count-to-10-working-postinstall",
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "node postinstall.js"
+  }
+}

@@ -26,7 +26,7 @@ test('makeEnv', function (t) {
   const env = lifecycle.makeEnv(pkg, {
     config,
     nodeOptions: '--inspect-brk --abort-on-uncaught-exception'
-  }, null, process.env)
+  }, null, Object.assign({}, process.env))
 
   t.equal('myPackage', env.npm_package_name, 'package data is included')
   t.equal('Mike Sherov', env.npm_package_contributors_0_name, 'nested package data is included')
@@ -185,4 +185,33 @@ test("reports child's output", function (t) {
       t.end()
     })
     .catch(t.end)
+})
+
+test('fails when given an invalid user id', {
+  skip: process.platform === 'win32' ? 'windows always in unsafe mode' : false
+}, function (t) {
+  const fixture = path.join(__dirname, 'fixtures', 'count-to-10-working-postinstall')
+  const dir = fixture
+
+  const pkg = require(path.join(fixture, 'package.json'))
+  t.rejects(lifecycle(pkg, 'postinstall', fixture, {
+    stdio: 'pipe',
+    log: {
+      level: 'silent',
+      info: noop,
+      warn: noop,
+      silly: noop,
+      verbose: noop,
+      pause: noop,
+      resume: noop,
+      clearProgress: noop,
+      showProgress: noop
+    },
+    dir,
+    user: 'this-user-name-does-not-exist-at-least-i-sure-hope-not',
+    group: 'maybe-there-are-a-bunch-of-us-who-do-not-exist',
+    unsafePerm: false,
+    config: {}
+  }), { code: 'EUIDLOOKUP' })
+  t.end()
 })
