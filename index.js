@@ -443,6 +443,18 @@ function makeEnv (data, opts, prefix, env) {
     }
   }
 
+  // assign script specific environnement variables (ignores non string values)
+  if (typeof opts.env === 'object') {
+    for (var k in opts.env) {
+      if (opts.env.hasOwnProperty(k)) {
+        var v = opts.env[k]
+        if (typeof v === 'string' || typeof v === 'number') {
+          env[k] = String(v)
+        }
+      }
+    }
+  }
+
   if (prefix !== 'npm_package_') return env
 
   prefix = 'npm_config_'
