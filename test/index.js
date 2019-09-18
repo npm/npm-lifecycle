@@ -20,7 +20,10 @@ test('makeEnv', function (t) {
     'myPackage:bar': 2,
     'myPackage:foo': 3,
     'myPackage@1.0.0:baz': 4,
-    'myPackage@1.0.0:foo': 5
+    'myPackage@1.0.0:foo': 5,
+    ignoreThisFunction: () => {},
+    jsonsAsUndefined: { toJSON: () => undefined },
+    jsonsAsFunction: { toJSON: () => () => {} }
   }
 
   const env = lifecycle.makeEnv(pkg, {
@@ -43,6 +46,10 @@ test('makeEnv', function (t) {
   t.equal('2', env.npm_package_config_bar, 'package config is included')
   t.equal('4', env.npm_package_config_baz, 'package@version config is included')
   t.equal('5', env.npm_package_config_foo, 'package@version config overrides package config')
+
+  t.equal(env.npm_package_config_ignoreThisFunction, undefined)
+  t.equal(env.npm_package_config_jsonsAsUndefined, undefined)
+  t.equal(env.npm_package_config_jsonsAsFunction, undefined)
 
   t.equal('--inspect-brk --abort-on-uncaught-exception', env.NODE_OPTIONS, 'nodeOptions sets NODE_OPTIONS')
   t.end()
