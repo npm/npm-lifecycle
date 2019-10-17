@@ -16,9 +16,8 @@ const uidNumber = require('uid-number')
 const umask = require('umask')
 const which = require('which')
 const byline = require('byline')
-const resolveFrom = require('resolve-from')
 
-const DEFAULT_NODE_GYP_PATH = resolveFrom(__dirname, 'node-gyp/bin/node-gyp')
+const DEFAULT_NODE_GYP_PATH = require.resolve('node-gyp/bin/node-gyp')
 const hookStatCache = new Map()
 
 let PATH = isWindows ? 'Path' : 'PATH'
