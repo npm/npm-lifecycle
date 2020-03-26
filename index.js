@@ -252,7 +252,7 @@ function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
 
   if (opts.log.level !== 'silent') {
     opts.log.clearProgress()
-    console.log(note)
+    opts.log.notice('lifecycle', logid(pkg, stage), note)
     opts.log.showProgress()
   }
   opts.log.verbose('lifecycle', logid(pkg, stage), 'unsafe-perm in lifecycle', unsafe)
