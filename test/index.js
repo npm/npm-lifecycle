@@ -28,7 +28,14 @@ test('makeEnv', function (t) {
 
   const env = lifecycle.makeEnv(pkg, {
     config,
-    nodeOptions: '--inspect-brk --abort-on-uncaught-exception'
+    nodeOptions: '--inspect-brk --abort-on-uncaught-exception',
+    env: {
+      npm_lifecycle_var1: '6',
+      npm_lifecycle_var2: 7,
+      npm_lifecycle_ignored_null: null,
+      npm_lifecycle_ignored_object: { name: '8' },
+      npm_lifecycle_ignored_array: [ 10, 11 ]
+    }
   }, null, Object.assign({}, process.env))
 
   t.equal('myPackage', env.npm_package_name, 'package data is included')
@@ -46,6 +53,11 @@ test('makeEnv', function (t) {
   t.equal('2', env.npm_package_config_bar, 'package config is included')
   t.equal('4', env.npm_package_config_baz, 'package@version config is included')
   t.equal('5', env.npm_package_config_foo, 'package@version config overrides package config')
+  t.equal('6', env.npm_lifecycle_var1, 'env string option is included')
+  t.equal('7', env.npm_lifecycle_var2, 'env number option is included')
+  t.equal(undefined, env.npm_lifecycle_ignored_null, 'env null options are ignored')
+  t.equal(undefined, env.npm_lifecycle_ignored_object, 'env object options are ignored')
+  t.equal(undefined, env.npm_lifecycle_ignored_array, 'env array options are ignored')
 
   t.equal(env.npm_package_config_ignoreThisFunction, undefined)
   t.equal(env.npm_package_config_jsonsAsUndefined, undefined)

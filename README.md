@@ -42,6 +42,8 @@ intended to be fully compatible with the way npm executes individual scripts.
 * `opts.stdio` - the [stdio](https://nodejs.org/api/child_process.html#child_process_options_stdio)
 passed to the child process. `[0, 1, 2]` by default.
 
+* `opts.env` - if is an object, all its properties of type 'number' of 'string' are added to the environment before running the script
+
 ##### Example
 
 ```javascript
