@@ -111,7 +111,7 @@ function lifecycle (pkg, stage, wd, opts) {
 }
 
 function _incorrectWorkingDirectory (wd, pkg) {
-  return wd.lastIndexOf(pkg.name) !== wd.length - pkg.name.length
+  return wd.lastIndexOf(pkg.name) !== wd.length - (typeof pkg.name === 'string' ? pkg.name.length : 0)
 }
 
 function lifecycle_ (pkg, stage, wd, opts, env, cb) {
